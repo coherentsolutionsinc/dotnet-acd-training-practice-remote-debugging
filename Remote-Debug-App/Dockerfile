@@ -1,29 +1,42 @@
-# See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-# This stage is used when running from VS in fast mode (Default for Debug configuration)
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+FROM trainingazure/asp.net:6.0.25 AS base
+
+RUN mkdir -p /home/LogFiles /opt/startup \
+     && echo "root:Docker!" | chpasswd \
+     && echo "cd /home" >> /etc/bash.bashrc \
+     && apt-get update \  
+     && apt-get install --yes --no-install-recommends openssh-server vim curl wget tcptraceroute 
+
+RUN rm -f /etc/ssh/sshd_config
+COPY ./Remote-Debug-App/sshd_config /etc/ssh/sshd_config
+
+RUN mkdir -p /var/run/sshd
+
+ENV SSH_PORT=2222
+EXPOSE 2222
+
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-
-# This stage is used to build the service project
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-ARG BUILD_CONFIGURATION=Release
+FROM trainingazure/dotnet:6.0.25 AS build
 WORKDIR /src
-COPY ["Remote-Debug-App.csproj", "."]
-RUN dotnet restore "./Remote-Debug-App.csproj"
+COPY ["Remote-Debug-App/Remote-Debug-App.csproj", "Remote-Debug-App/"]
+RUN dotnet restore "Remote-Debug-App/Remote-Debug-App.csproj"
+
 COPY . .
-WORKDIR "/src/."
-RUN dotnet build "./Remote-Debug-App.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/Remote-Debug-App"
+RUN dotnet build "Remote-Debug-App.csproj" -c Debug -o /app/build
 
-# This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Remote-Debug-App.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Remote-Debug-App.csproj" -c Debug -o /app/publish
 
-# This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Remote-Debug-App.dll"]
+
+COPY ./Remote-Debug-App/launch.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/launch.sh
+
+ENTRYPOINT ["bash","launch.sh"]
