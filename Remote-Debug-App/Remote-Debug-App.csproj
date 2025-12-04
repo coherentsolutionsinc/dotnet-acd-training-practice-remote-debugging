@@ -5,6 +5,7 @@
     <RootNamespace>Remote_Debug_App</RootNamespace>
     <UserSecretsId>8f744e97-8b10-4bca-a42a-cfd3224d5e1f</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>.</DockerfileContext>
   </PropertyGroup>
 
   <ItemGroup>

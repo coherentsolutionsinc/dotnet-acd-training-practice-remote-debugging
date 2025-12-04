@@ -11,11 +11,11 @@ namespace Remote_Debug_App
 {
     public class Startup
     {
-        public  Practice4AppRepository Repository;
+        public  PracticeRemoteAppRepository Repository;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            Repository = new Practice4AppRepository();
+            Repository = new PracticeRemoteAppRepository();
         }
 
         public IConfiguration Configuration { get; }
