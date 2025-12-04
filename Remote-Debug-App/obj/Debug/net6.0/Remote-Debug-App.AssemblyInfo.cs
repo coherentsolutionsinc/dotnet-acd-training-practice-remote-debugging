@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Remote-Debug-App")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+89cd72d2eade5692c57bcc2057d3baa6ef5a40c3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3afefa3945ab9b6c1b5df19757258cfb54fa22e1")]
 [assembly: System.Reflection.AssemblyProductAttribute("Remote-Debug-App")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Remote-Debug-App")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
