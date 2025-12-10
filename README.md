@@ -4,5 +4,4 @@ Welcome, this repository is a suplimental material for the "Remote Debuggin" pra
 
 The image build from the source code is accessible on [DockerHub](https://hub.docker.com/repository/docker/coherentsolutions/coherent-dotnet-acd-training-practice-remote-debugging/general).
 
-**NOTE**
-The image uses a legacy .NET on purpose.
+**NOTE**: The image uses a legacy .NET on purpose.
